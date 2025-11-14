@@ -54,6 +54,7 @@ if __name__ == "__main__":
     config_file_path = os.path.join(data_dir, 'config.json')
     resources_file_path = os.path.join(data_dir, 'resources.json')
     metadata_file_path = os.path.join(data_dir, 'metadata.json')
+
     with open(xapk_manifest_path, encoding='utf-8') as f:
         manifest = json.load(f)
     

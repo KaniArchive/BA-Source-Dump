@@ -4,7 +4,26 @@ from pathlib import Path
 
 from lib.TableEncryptionService import TableEncryptionService
 
-def find_game_config(game_path) -> None | bytes:
+def find_game_config(game_path: str, game_version: str = "jp") -> None | bytes:
+    if game_version.lower() == "jp":
+        last_pattern = bytes([
+            0x00,
+            0x00,
+            0x92,
+            0x03,
+            0x00,
+            0x00,
+        ])
+    else :
+        last_pattern = bytes([
+            0x00,
+            0x00,
+            0xEE,
+            0x01,
+            0x00,
+            0x00,
+        ])
+
     pattern = bytes([
         0x47,
         0x61,
@@ -19,14 +38,9 @@ def find_game_config(game_path) -> None | bytes:
         0x6E,
         0x66,
         0x69,
-        0x67,
-        0x00,
-        0x00,
-        0x92,
-        0x03,
-        0x00,
-        0x00,
+        0x67
     ])
+    pattern = pattern + last_pattern
 
     for config_file in Path(game_path).rglob('*'):
         if config_file.is_file():

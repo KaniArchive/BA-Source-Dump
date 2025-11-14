@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
     xapk_manifest_path = os.path.join(extract_dir, "manifest.json")
     os.makedirs(data_dir, exist_ok=True)
-
+    
     # Dump il2cpp data from the apk file
     print("Dumping il2cpp data...")
     il2cppDumper = Il2CppInspectorDumperCLI(il2cpp_exec_path, libil2cpp_path, metadata_path)
@@ -52,8 +52,9 @@ if __name__ == "__main__":
     # Get the game url
     output_file_path = os.path.join(data_dir, "config.json")
     metadata_file_path = os.path.join(data_dir, 'metadata.json')
+    game_main_config_path = os.path.join(extract_dir, "UnityDataAssetPack", "assets", "bin", "Data")
 
-    game_config = find_game_config(os.path.join(extract_dir, "UnityDataAssetPack", "assets", "bin", "Data"))
+    game_config = find_game_config(game_main_config_path)
     if game_config is None:
         print("Game config not found")
         exit(1)
@@ -79,6 +80,7 @@ if __name__ == "__main__":
     addressGameVersion = f"{addressVersion}.{addressUrl.split('/')[-1]}"
     game_metadata = {
         "ServerInfoDataUrl": config_url,
+        "ServerInfoVersion": config_url.split('/')[-1].split('.')[0],
         "GameVersion": manifest["version_name"],
         "BuildVersion": manifest["version_code"],
         "AddressableVersion": addressGameVersion,
