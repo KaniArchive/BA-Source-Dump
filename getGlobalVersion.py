@@ -1,7 +1,6 @@
 import os, platform
 import json
 import requests
-import shutil
 
 from lib.GlobalCatalogFetcher import catalog_url
 from lib.Il2CppInspectorDumper import Il2CppInspectorDumperCLI
@@ -24,6 +23,7 @@ if __name__ == "__main__":
         il2cpp_exec_path = os.path.join(lib_dir, "Il2CppInspector", "Il2CppInspector.Redux.CLI.exe")
         fbsdumper_exec_path = os.path.join(lib_dir, "FbsDumper", "FbsDumper.exe")
 
+    xapk_manifest_path = os.path.join(extract_dir, "manifest.json")
     os.makedirs(data_dir, exist_ok=True)
 
     # Dump il2cpp data from the apk file
@@ -53,6 +53,9 @@ if __name__ == "__main__":
     config_data = catalog_url()
     config_file_path = os.path.join(data_dir, 'config.json')
     resources_file_path = os.path.join(data_dir, 'resources.json')
+    metadata_file_path = os.path.join(data_dir, 'metadata.json')
+    with open(xapk_manifest_path, encoding='utf-8') as f:
+        manifest = json.load(f)
     
     # Request the data from config and save to the disk
     try:
@@ -69,5 +72,18 @@ if __name__ == "__main__":
         print(f"Resources data has been written to {resources_file_path}")
     except requests.RequestException as e:
         print(f"Error fetching config data: {e}")
+    
+    resourceUrl = config_data['patch']['resource_path']
+    resourcePatch = config_data['patch']['patch_version']
+    game_metadata = {
+        "GameVersion": manifest["version_name"],
+        "BuildVersion": manifest["version_code"],
+        "ResourceUrl": resourceUrl,
+        "ResourcePatch": resourcePatch,
+        "ResourceBuild": resourceUrl.split('/')[-2]
+    }
+
+    with open(metadata_file_path, 'w', encoding='utf-8') as file:
+        json.dump(game_metadata, file, indent=4, ensure_ascii=False)
 
     print(f"Data has been moved to {data_dir}")

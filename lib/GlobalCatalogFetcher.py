@@ -2,6 +2,7 @@ import re
 import requests
 
 from requests_cache import CachedSession
+from typing import Dict, Any
 
 PLAYSTORE_URL = "https://play.google.com/store/apps/details?id=com.nexon.bluearchive&hl=in&gl=US"
 API_URL = "https://api-patch.nexon.com/patch/v1.1/version-check"
@@ -15,7 +16,7 @@ def get_game_version() -> str:
         raise ValueError("Could not find game version in Play Store page")
     return version_match.group()
 
-def catalog_url() -> str:
+def catalog_url() -> Dict[str, Any]:
     version = get_game_version()
     build_number = version.split('.')[-1]
 
