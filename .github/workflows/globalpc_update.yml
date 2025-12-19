@@ -147,7 +147,7 @@ jobs:
 
           steam_app_id=$(jq -r '.SteamAppId' globalpc_data/metadata.json)
           steam_depot_id=$(jq -r '.SteamDepotId' globalpc_data/metadata.json)
-          steam_manifest_id=$(jq -r '.SteamAppId' globalpc_data/metadata.json)
+          steam_manifest_id=$(jq -r '.SteamManifestId' globalpc_data/metadata.json)
           steamdb_manifest_url=$(jq -r '.SteamDBManifestUrl' globalpc_data/metadata.json)
 
           full_game_metadata="${steam_app_id}_${steam_depot_id}_${steam_manifest_id}"
