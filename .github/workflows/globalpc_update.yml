@@ -1,11 +1,12 @@
-name: Dump JP Update
+name: Dump GlobalPC Update
 
 on:
-  schedule:
-    # Run every Wednesday at 02:00, 05:00, 09:00, 12:00 UTC
-    - cron: '0 2,5,9,12 * * 3'
+  # Currently disabled
+  # schedule:
+    # Run every Tuesday at 02:00, 05:00, 09:00, 12:00 UTC
+    # - cron: '0 2,5,9,12 * * 2'
     # Run everyday at 07:00 UTC
-    - cron: '0 7 * * *'
+    # - cron: '0 7 * * *'
   workflow_dispatch:
     inputs:
       force_update:
@@ -18,7 +19,7 @@ permissions:
   contents: write
 
 jobs:
-  dump-jp-update:
+  dump-global-update:
     environment: "GitHub Action"
     runs-on: windows-latest
 
@@ -28,10 +29,10 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
-
+      
       - name: Update remote branch references
         run: git fetch --all --tags
-
+        
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
@@ -41,51 +42,48 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.13.x'
-
-      - name: Install Python Dependencies
-        run: pip install -r requirements.txt
-        
+      
       - name: Configure Git
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-      
+
+      - name: Install Python Dependencies
+        run: pip install -r requirements.txt
+
       - name: Get Tools
         run: python getTools.py
 
-      - name: Get APK & Dumper
-        run: python getAndroidGameData.py --region jp
-        
       - name: Run Dumper
-        run: python getJPVersion.py
+        run: python getPCGameData.py --username "${{ secrets.STEAM_USERNAME }}" --password "${{ secrets.STEAM_PASSWORD }}"
 
       - name: Save content temporary
         id: save_data
         shell: bash
         run: |
-          TEMP_DIR="$RUNNER_TEMP/jp_update_data"
+          TEMP_DIR="$RUNNER_TEMP/globalpc_update_data"
           mkdir -p "$TEMP_DIR"
-          cp -r jp_data "$TEMP_DIR/"
-          echo "temp_path=$TEMP_DIR/jp_data" >> $GITHUB_OUTPUT
+          cp -r globalpc_data "$TEMP_DIR/"
+          echo "temp_path=$TEMP_DIR/globalpc_data" >> $GITHUB_OUTPUT
 
       - name: Switch Branch
-        run: git checkout jp-dump
+        run: git checkout globalpc-dump
 
       - name: Restore content
         shell: bash
         run: |
           TEMP_PATH="${{ steps.save_data.outputs.temp_path }}"
           cp -r "$TEMP_PATH" .
-
-      - name: Check if config.json changed
+      
+      - name: Check if metadata.json changed
         id: check_diff
         shell: bash
         run: |
-          config_file="jp_data/config.json"
+          config_file="globalpc_data/metadata.json"
           changed_flag=false
 
-          if git ls-tree -r origin/jp-dump --name-only | grep -Fxq "$config_file"; then
-            if git diff --quiet origin/jp-dump -- "$config_file"; then
+          if git ls-tree -r origin/global-dump --name-only | grep -Fxq "$config_file"; then
+            if git diff --quiet origin/global-dump -- "$config_file"; then
               echo "✅ The file is identical to the previous commit."
             else
               echo "⚠️ The file has been modified."
@@ -106,7 +104,7 @@ jobs:
         run: |
           git lfs install
           
-          find ./jp_data -type f -size +50M -exec git lfs track {} \;
+          find ./globalpc_data -type f -size +50M -exec git lfs track {} \;
 
           if [ -f .gitattributes ]; then
             git add .gitattributes
@@ -121,15 +119,15 @@ jobs:
           github.event.inputs.force_update == 'true'
         shell: bash
         run: |
-          game_version=$(jq -r '.GameVersion' jp_data/metadata.json)
-          addressable_build=$(jq -r '.AddressableBuildVersion' jp_data/metadata.json)
+          game_version=$(jq -r '.GameVersion' globalpc_data/metadata.json)
+          resource_build=$(jq -r '.ResourceBuild' globalpc_data/metadata.json)
           
-          commit_msg="${game_version}_${addressable_build}"
+          commit_msg="${game_version}_${resource_build}"
           
-          git add jp_data
+          git add globalpc_data
           git commit -m "$commit_msg"
-          git push origin jp-dump
-
+          git push origin global-dump
+      
       - name: Send update to Discord
         if: >
           steps.check_diff.outputs.changed == 'true' || 
@@ -138,35 +136,29 @@ jobs:
         run: |
           commit_hash=$(git rev-parse HEAD)
           commit_url="https://github.com/${GITHUB_REPOSITORY}/commit/${commit_hash}"
-          prepath_raw_link="https://github.com/${GITHUB_REPOSITORY}/raw/${commit_hash}/jp_data/"
-          treepath_link="https://github.com/${GITHUB_REPOSITORY}/tree/${commit_hash}/jp_data/"
+          prepath_raw_link="https://github.com/${GITHUB_REPOSITORY}/raw/${commit_hash}/globalpc_data/"
+          treepath_link="https://github.com/${GITHUB_REPOSITORY}/tree/${commit_hash}/globalpc_data/"
 
-          config_link="${prepath_raw_link}/config.json"
+          metadata_link="${prepath_raw_link}/metadata.json"
           dump_data_link="${prepath_raw_link}/cs/il2cpp.cs"
           fbs_v1_data_link="${prepath_raw_link}/BlueArchiveV1.fbs"
           fbs_v2_data_link="${prepath_raw_link}/BlueArchiveV2.fbs"
           dll_files="${treepath_link}/dll"
-          
-          game_version=$(jq -r '.GameVersion' jp_data/metadata.json)
-          server_info_url=$(jq -r '.ServerInfoDataUrl' jp_data/metadata.json)
-          server_info_version=$(jq -r '.ServerInfoVersion' jp_data/metadata.json)
-          addressable_url=$(jq -r '.AddressableUrl' jp_data/metadata.json)
-          addressable_version=$(jq -r '.AddressableVersion' jp_data/metadata.json)
-          addressable_build_version=$(jq -r '.AddressableBuildVersion' jp_data/metadata.json)
 
-          full_version="${game_version}_${addressable_build_version}"
+          steam_app_id=$(jq -r '.SteamAppId' globalpc_data/metadata.json)
+          steam_depot_id=$(jq -r '.SteamDepotId' globalpc_data/metadata.json)
+          steam_manifest_id=$(jq -r '.SteamAppId' globalpc_data/metadata.json)
+          steamdb_manifest_url=$(jq -r '.SteamAppId' globalpc_data/metadata.json)
 
           embed_description=$(cat <<EOF
           **Game Info**
-          Game Version: ${game_version}
-          Server Info Data Url: ${server_info_url}
-          Server Info Data Version: ${server_info_version}
-          Addressable Url: ${addressable_url}
-          Addressable Version: ${addressable_version}
-          Addressable Build Version: ${addressable_build_version}
+          Steam App Id: ${steam_app_id}
+          Steam Depot Id: ${steam_depot_id}
+          Steam Manifest Id: ${steam_manifest_id}
+          SteamDB Manifest Url: ${steamdb_manifest_url}
 
           **Game Data**
-          Config Data: [config.json](${config_link})
+          Metadata Data: [metadata.json](${metadata_link})
           Dump Data: [il2cpp.cs](${dump_data_link})
           FBS V1 (DummyDll Dump): [BlueArchiveV1.fbs](${fbs_v1_data_link})
           FBS V2 (Assembly Dump): [BlueArchiveV2.fbs](${fbs_v2_data_link})
@@ -177,7 +169,7 @@ jobs:
           timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
           payload=$(jq -n \
-            --arg title "JP Update (${full_version})" \
+            --arg title "Global PC Update (${steam_manifest_id})" \
             --arg description "$embed_description" \
             --arg url "$commit_url" \
             --arg timestamp "$timestamp" \
@@ -187,7 +179,7 @@ jobs:
                   "title": $title,
                   "description": $description,
                   "url": $url,
-                  "color": 255,
+                  "color": 5793266,
                   "timestamp": $timestamp
                 }
               ]

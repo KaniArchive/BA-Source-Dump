@@ -9,7 +9,7 @@ from lib.FBSDumper import FbsDumperCLI
 if __name__ == "__main__":
     # Setup paths
     os_system = platform.system()
-    lib_dir = os.path.join(os.getcwd(), f'dump_lib')
+    tools_dir = os.path.join(os.getcwd(), f'tools')
     extract_dir = os.path.join(os.getcwd(), 'jp_extracted')
     data_dir = os.path.join(os.getcwd(), 'jp_data')
 
@@ -17,11 +17,11 @@ if __name__ == "__main__":
     metadata_path = os.path.join(extract_dir, "BlueArchive_apk", "assets", "bin", "Data", "Managed", "Metadata", "global-metadata.dat")
     dummydll_dir = os.path.join(data_dir, "dll")
 
-    il2cpp_exec_path = os.path.join(lib_dir, "Il2CppInspector", "Il2CppInspector.Redux.CLI")
-    fbsdumper_exec_path = os.path.join(lib_dir, "FbsDumper", "FbsDumper")
+    il2cpp_exec_path = os.path.join(tools_dir, "Il2CppInspector", "Il2CppInspector.Redux.CLI")
+    fbsdumper_exec_path = os.path.join(tools_dir, "FbsDumper", "FbsDumper")
     if os_system == "Windows":
-        il2cpp_exec_path = os.path.join(lib_dir, "Il2CppInspector", "Il2CppInspector.Redux.CLI.exe")
-        fbsdumper_exec_path = os.path.join(lib_dir, "FbsDumper", "FbsDumper.exe")
+        il2cpp_exec_path = os.path.join(tools_dir, "Il2CppInspector", "Il2CppInspector.Redux.CLI.exe")
+        fbsdumper_exec_path = os.path.join(tools_dir, "FbsDumper", "FbsDumper.exe")
 
     xapk_manifest_path = os.path.join(extract_dir, "manifest.json")
     os.makedirs(data_dir, exist_ok=True)

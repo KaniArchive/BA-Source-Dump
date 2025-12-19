@@ -50,8 +50,11 @@ jobs:
       - name: Install Python Dependencies
         run: pip install -r requirements.txt
 
-      - name: Get APK & Dumper
-        run: python getApkData.py --region global
+      - name: Get Tools
+        run: python getTools.py
+
+      - name: Get Game Data
+        run: python getAndroidGameData.py --region global
 
       - name: Run Dumper
         run: python getGlobalVersion.py

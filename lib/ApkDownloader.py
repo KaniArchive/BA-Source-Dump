@@ -7,6 +7,7 @@ class FileDownloader:
         self.url = url
         self.download_dir = download_dir
         self.filename = filename
+        
         self.local_filepath = os.path.join(self.download_dir, self.filename)
         os.makedirs(self.download_dir, exist_ok=True)
         self.scraper = cloudscraper.create_scraper()
@@ -77,8 +78,8 @@ class FileExtractor:
         except Exception as e:
             print(f"Error extracting {self.file_path}: {e}")
 
-    def extract_il2cppPlugin(self):
-        destination_dir = os.path.join(self.extract_dir, 'Il2CppInspector')
+    def extract_depotdownloader(self):
+        destination_dir = os.path.join(self.extract_dir, 'DepotDownloader')
         os.makedirs(destination_dir, exist_ok=True)
         
         try:
