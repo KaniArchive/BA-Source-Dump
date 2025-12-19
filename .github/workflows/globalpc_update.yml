@@ -150,7 +150,7 @@ jobs:
           steam_manifest_id=$(jq -r '.SteamAppId' globalpc_data/metadata.json)
           steamdb_manifest_url=$(jq -r '.SteamDBManifestUrl' globalpc_data/metadata.json)
 
-          full_game_metadata="${steam_app_id}_${steam_depot_id}_${steam_manifest_id
+          full_game_metadata="${steam_app_id}_${steam_depot_id}_${steam_manifest_id}"
 
           embed_description=$(cat <<EOF
           **Game Info**
