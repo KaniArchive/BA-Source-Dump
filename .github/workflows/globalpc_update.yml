@@ -1,12 +1,11 @@
 name: Dump GlobalPC Update
 
 on:
-  # Currently disabled
-  # schedule:
+  schedule:
     # Run every Tuesday at 02:00, 05:00, 09:00, 12:00 UTC
-    # - cron: '0 2,5,9,12 * * 2'
+    - cron: '0 2,5,9,12 * * 2'
     # Run everyday at 07:00 UTC
-    # - cron: '0 7 * * *'
+    - cron: '0 7 * * *'
   workflow_dispatch:
     inputs:
       force_update:
@@ -119,10 +118,11 @@ jobs:
           github.event.inputs.force_update == 'true'
         shell: bash
         run: |
-          game_version=$(jq -r '.GameVersion' globalpc_data/metadata.json)
-          resource_build=$(jq -r '.ResourceBuild' globalpc_data/metadata.json)
+          steam_app_id=$(jq -r '.SteamAppId' globalpc_data/metadata.json)
+          steam_depot_id=$(jq -r '.SteamDepotId' globalpc_data/metadata.json)
+          steam_manifest_id=$(jq -r '.SteamAppId' globalpc_data/metadata.json)
           
-          commit_msg="${game_version}_${resource_build}"
+          commit_msg="${steam_app_id}_${steam_depot_id}_${steam_manifest_id}"
           
           git add globalpc_data
           git commit -m "$commit_msg"
@@ -148,7 +148,9 @@ jobs:
           steam_app_id=$(jq -r '.SteamAppId' globalpc_data/metadata.json)
           steam_depot_id=$(jq -r '.SteamDepotId' globalpc_data/metadata.json)
           steam_manifest_id=$(jq -r '.SteamAppId' globalpc_data/metadata.json)
-          steamdb_manifest_url=$(jq -r '.SteamAppId' globalpc_data/metadata.json)
+          steamdb_manifest_url=$(jq -r '.SteamDBManifestUrl' globalpc_data/metadata.json)
+
+          full_game_metadata="${steam_app_id}_${steam_depot_id}_${steam_manifest_id
 
           embed_description=$(cat <<EOF
           **Game Info**
@@ -169,7 +171,7 @@ jobs:
           timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
           payload=$(jq -n \
-            --arg title "Global PC Update (${steam_manifest_id})" \
+            --arg title "Global PC Update (${full_game_metadata})" \
             --arg description "$embed_description" \
             --arg url "$commit_url" \
             --arg timestamp "$timestamp" \
