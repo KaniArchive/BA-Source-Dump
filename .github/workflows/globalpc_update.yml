@@ -160,7 +160,7 @@ jobs:
           SteamDB Manifest Url: ${steamdb_manifest_url}
 
           **Game Data**
-          Metadata Data: [metadata.json](${metadata_link})
+          Metadata: [metadata.json](${metadata_link})
           Dump Data: [il2cpp.cs](${dump_data_link})
           FBS V1 (DummyDll Dump): [BlueArchiveV1.fbs](${fbs_v1_data_link})
           FBS V2 (Assembly Dump): [BlueArchiveV2.fbs](${fbs_v2_data_link})

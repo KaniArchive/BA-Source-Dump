@@ -93,7 +93,7 @@ if __name__ == "__main__":
         "SteamAppId": APP_ID,
         "SteamDepotId": DEPOT_ID,
         "SteamManifestId": manifest_id if manifest_id is not None else "Unknown",
-        "SteamDBManifestUrl": f"https://steamdb.info/depot/3557621/history/?changeid=M:{manifest_id}",
+        "SteamDBManifestUrl": f"https://steamdb.info/depot/{DEPOT_ID}/history/?changeid=M:{manifest_id}",
     }
 
     with open(metadata_file_path, 'w', encoding='utf-8') as file:
