@@ -525,7 +525,11 @@ enum MailType : int {
 	Temp_4 = 27,
 	Temp_5 = 28,
 	Temp_6 = 29,
-	ProductGooglePointReward = 30
+	ProductGooglePointReward = 30,
+	PCStoreProduct = 31,
+	ProductFreeReward = 32,
+	ProductBattlePass = 33,
+	ProductAttendance = 34
 }
 
 enum StarGoalType : int {
@@ -4371,7 +4375,8 @@ enum ShopCategoryType : int {
 	SelectPickupGacha = 35,
 	GemDaily = 36,
 	GemWeekly = 37,
-	CafeSummonTicket = 38
+	CafeSummonTicket = 38,
+	SelectPickupFesGacha = 39
 }
 
 enum BubbleType : int {
@@ -5542,7 +5547,8 @@ enum StoreType : int {
 	MicrosoftStore = 4,
 	GalaxyStore = 5,
 	STEAM = 6,
-	FreeProduct = 7
+	FreeProduct = 7,
+	PCStore = 8
 }
 
 enum PurchasePeriodType : int {
@@ -5605,7 +5611,8 @@ enum PurchaseSourceType : int {
 	ProductMonthly = 2,
 	ProductBattlePass = 3,
 	ProductSelect = 4,
-	ProductGooglePoint = 5
+	ProductGooglePoint = 5,
+	ProductDailyRecord = 6
 }
 
 enum ProductCategory : int {
@@ -5616,7 +5623,8 @@ enum ProductCategory : int {
 	GachaDirect = 4,
 	TimeLimit = 5,
 	BattlePass = 6,
-	GooglePoint = 7
+	GooglePoint = 7,
+	DailyRecord = 8
 }
 
 enum ProductDisplayTag : int {
@@ -5697,7 +5705,8 @@ enum GachaDisplayTag : int {
 	New = 5,
 	Fes = 6,
 	SelectRecruit = 7,
-	LimitedThreeStar = 8
+	LimitedThreeStar = 8,
+	Revival = 9
 }
 
 enum ShopPurchasePopupType : int {
@@ -5716,7 +5725,8 @@ enum ShopGroupType : int {
 	SecretStoneGrowth = 6,
 	TimeAttack = 7,
 	EliminateRaid = 8,
-	Gem = 9
+	Gem = 9,
+	Chaser = 10
 }
 
 enum ShortcutContentType : int {
@@ -6223,6 +6233,15 @@ table ConstConquestExcel {
 	AnimationUnitDelay: float; // index 0x6
 }
 
+table ConstContentsExcelTable {
+	DataList: [ConstContentsExcel]; // index 0x1
+}
+
+table ConstContentsExcel {
+	UseSearchFieldOptimize: bool; // index 0x1
+	SearchUpdateTime: float; // index 0x2
+}
+
 table ConstEventCommonExcelTable {
 	DataList: [ConstEventCommonExcel]; // index 0x1
 }
@@ -6262,10 +6281,9 @@ table ConstKeyMappingExcelTable {
 
 table ConstKeyMappingExcel {
 	DragSensitivity: float; // index 0x1
-	PcInformationGroupID: long; // index 0x2
-	ScrollWheelFactor: float; // index 0x3
-	RemoveKeycodeWord: string; // index 0x4
-	TutorialDialogTouchKey: string; // index 0x5
+	ScrollWheelFactor: float; // index 0x2
+	RemoveKeycodeWord: string; // index 0x3
+	TutorialDialogTouchKey: string; // index 0x4
 }
 
 table ConstMinigameCCGExcelTable {
@@ -9233,10 +9251,11 @@ table EventContentNotifyExcel {
 table EventContentPlayGuideExcel {
 	Id: long; // index 0x1
 	EventContentId: long; // index 0x2
-	DisplayOrder: int; // index 0x3
-	GuideTitle: string; // index 0x4
-	GuideImagePath: string; // index 0x5
-	GuideText: string; // index 0x6
+	IsPcBuild: bool; // index 0x3
+	DisplayOrder: int; // index 0x4
+	GuideTitle: string; // index 0x5
+	GuideImagePath: string; // index 0x6
+	GuideText: string; // index 0x7
 }
 
 table EventContentScenarioExcel {
@@ -9347,6 +9366,7 @@ table EventContentShopRefreshExcel {
 	RefreshGroup: int; // index 0x8
 	Prob: int; // index 0x9
 	BuyReportEventName: string; // index 0xA
+	ProductUpdateTime: string; // index 0xB
 }
 
 table EventContentSpecialOperationsExcel {
@@ -9535,9 +9555,6 @@ table FavorLevelRewardExcel {
 	FavorLevel: long; // index 0x2
 	StatType: [EquipmentOptionType]; // index 0x3
 	StatValue: [long]; // index 0x4
-	RewardParcelType: [ParcelType]; // index 0x5
-	RewardParcelId: [long]; // index 0x6
-	RewardAmount: [long]; // index 0x7
 }
 
 table FixedEchelonSettingExcel {
@@ -9918,9 +9935,10 @@ table IdCardBackgroundExcel {
 table InformationExcel {
 	GroupID: long; // index 0x1
 	PageName: string; // index 0x2
-	LocalizeCodeId: string; // index 0x3
-	TutorialParentName: [string]; // index 0x4
-	UIName: [string]; // index 0x5
+	IsPcBuild: bool; // index 0x3
+	LocalizeCodeId: string; // index 0x4
+	TutorialParentName: [string]; // index 0x5
+	UIName: [string]; // index 0x6
 }
 
 table InformationStrategyObjectExcel {
@@ -9982,16 +10000,8 @@ table KeyMappingExcel {
 
 table KeyMappingPopupExcel {
 	PrefabName: string; // index 0x1
-	ButtonName01: string; // index 0x2
-	KeyMappingId01: string; // index 0x3
-	ButtonName02: string; // index 0x4
-	KeyMappingId02: string; // index 0x5
-	ButtonName03: string; // index 0x6
-	KeyMappingId03: string; // index 0x7
-	ButtonName04: string; // index 0x8
-	KeyMappingId04: string; // index 0x9
-	ButtonName05: string; // index 0xA
-	KeyMappingId05: string; // index 0xB
+	ButtonName: [string]; // index 0x2
+	KeyMappingId: [string]; // index 0x3
 }
 
 table LevelExpMasterCoinExcel {
@@ -10546,10 +10556,11 @@ table MiniGameMissionExcel {
 table MiniGamePlayGuideExcel {
 	Id: long; // index 0x1
 	EventContentId: long; // index 0x2
-	DisplayOrder: int; // index 0x3
-	GuideTitle: string; // index 0x4
-	GuideImagePath: string; // index 0x5
-	GuideText: string; // index 0x6
+	IsPcBuild: bool; // index 0x3
+	DisplayOrder: int; // index 0x4
+	GuideTitle: string; // index 0x5
+	GuideImagePath: string; // index 0x6
+	GuideText: string; // index 0x7
 }
 
 table MiniGameRhythmBgmExcel {
@@ -10919,6 +10930,14 @@ table MissionExcel {
 	MissionRewardAmount: [int]; // index 0x1C
 }
 
+table MomotalkScheduleSpoilerPopupExcel {
+	FavorScheduleId: long; // index 0x1
+	SpoilerPopupTitle: uint; // index 0x2
+	SpoilerPopupDescription: uint; // index 0x3
+	PopupType: SpoilerPopupType; // index 0x4
+	ConditionScenarioModeId: long; // index 0x5
+}
+
 table MultiFloorRaidRewardExcel {
 	RewardGroupId: long; // index 0x1
 	ClearStageRewardProb: long; // index 0x2
@@ -11070,6 +11089,16 @@ table PickupDuplicateBonusExcel {
 	RewardParcelAmount: long; // index 0x7
 }
 
+table PickupFirstGetBonus2Excel {
+	Id: long; // index 0x1
+	ShopRecruitId: long; // index 0x2
+	RecruitSellectionShopId: long; // index 0x3
+	PickupCharacterId: long; // index 0x4
+	RewardParcelType: ParcelType; // index 0x5
+	RewardParcelId: long; // index 0x6
+	RewardParcelAmount: long; // index 0x7
+}
+
 table PickupFirstGetBonusExcel {
 	ShopRecruitId: long; // index 0x1
 	RecruitSellectionShopId: long; // index 0x2
@@ -11148,6 +11177,33 @@ table ProductBattlePassExcel {
 	ParcelType: [ParcelType]; // index 0x7
 	ParcelId: [long]; // index 0x8
 	ParcelAmount: [long]; // index 0x9
+}
+
+table ProductDailyRecordExcel {
+	Id: long; // index 0x1
+	ProductId: string; // index 0x2
+	StoreType: StoreType; // index 0x3
+	Price: long; // index 0x4
+	PurchaseCountLimit: long; // index 0x5
+	RewardId: long; // index 0x6
+	ParcelType: [ParcelType]; // index 0x7
+	ParcelId: [long]; // index 0x8
+	ParcelAmount: [long]; // index 0x9
+	TitleImagePath: string; // index 0xA
+}
+
+table ProductDailyRecordInfoExcel {
+	Id: long; // index 0x1
+	DaySize: int; // index 0x2
+	ExpirationDate: string; // index 0x3
+}
+
+table ProductDailyRecordRewardExcel {
+	Id: long; // index 0x1
+	Day: int; // index 0x2
+	RewardParcelType: [ParcelType]; // index 0x3
+	RewardId: [long]; // index 0x4
+	RewardAmount: [long]; // index 0x5
 }
 
 table ProductExcel {
