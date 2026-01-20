@@ -6,38 +6,11 @@
     "min_build_version": "1.85.395772",
     "min_build_number": "395772",
     "patch": {
-        "patch_version": 1538,
-        "resource_path": "https://ba.dn.nexoncdn.co.kr/com.nexon.bluearchive/f180852a7a794b44/resource-data.json",
+        "patch_version": 1540,
+        "resource_path": "https://ba.dn.nexoncdn.co.kr/com.nexon.bluearchive/4aa99e82f9e144e1/resource-data.json",
         "bdiff_path": [
             {
-                "1522": "https://ba.dn.nexoncdn.co.kr/com.nexon.bluearchive/nxpatch/a1dd4eed0ba54a89/bdiff-data.json"
-            },
-            {
-                "1520": "https://ba.dn.nexoncdn.co.kr/com.nexon.bluearchive/nxpatch/adb51a759f064ddb/bdiff-data.json"
-            },
-            {
-                "1518": "https://ba.dn.nexoncdn.co.kr/com.nexon.bluearchive/nxpatch/7346a5e6d8f3407b/bdiff-data.json"
-            },
-            {
-                "1517": "https://ba.dn.nexoncdn.co.kr/com.nexon.bluearchive/nxpatch/1c5abf7418a545c9/bdiff-data.json"
-            },
-            {
-                "1516": "https://ba.dn.nexoncdn.co.kr/com.nexon.bluearchive/nxpatch/2f456b9a737549aa/bdiff-data.json"
-            },
-            {
-                "1515": "https://ba.dn.nexoncdn.co.kr/com.nexon.bluearchive/nxpatch/8923d76bb4bb4009/bdiff-data.json"
-            },
-            {
-                "1509": "https://ba.dn.nexoncdn.co.kr/com.nexon.bluearchive/nxpatch/b431439148ba4df3/bdiff-data.json"
-            },
-            {
-                "1501": "https://ba.dn.nexoncdn.co.kr/com.nexon.bluearchive/nxpatch/22c1cb321e614330/bdiff-data.json"
-            },
-            {
-                "1500": "https://ba.dn.nexoncdn.co.kr/com.nexon.bluearchive/nxpatch/70e24c422ee04099/bdiff-data.json"
-            },
-            {
-                "1490": "https://ba.dn.nexoncdn.co.kr/com.nexon.bluearchive/nxpatch/bb6f800e2c0f4f35/bdiff-data.json"
+                "1538": "https://ba.dn.nexoncdn.co.kr/com.nexon.bluearchive/nxpatch/1d1dbc53459a432c/bdiff-data.json"
             }
         ]
     }
