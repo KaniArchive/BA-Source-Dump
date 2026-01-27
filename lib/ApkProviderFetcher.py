@@ -17,13 +17,19 @@ def get_apk_url(pkg: str):
     pure_build = parse_ver(apk_pure_version)
     combo_build = parse_ver(apk_combo_version)
     
-    if pure_build >= combo_build and apk_pure_cdn_url:
-        print(f"Using APKPure CDN URL for package: {pkg}")
+    print(f"DEBUG: Pure Build: {pure_build} | Combo Build: {combo_build}")
+
+    if pure_build == 0 and combo_build == 0:
+        raise ValueError("Critical Error: Could not detect version builds from either source.")
+
+    if pure_build > combo_build and apk_pure_cdn_url:
         return apk_pure_cdn_url
     
     if apk_combo_cdn_url:
-        print(f"Using APKCombo CDN URL for package: {pkg}")
         return apk_combo_cdn_url
+        
+    if apk_pure_cdn_url:
+        return apk_pure_cdn_url
         
     raise ValueError(f"Could not retrieve a valid CDN URL for package: {pkg}")
 
