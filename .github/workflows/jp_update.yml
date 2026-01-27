@@ -59,6 +59,7 @@ jobs:
         run: python getTools.py
 
       - name: Get APK & Dumper
+        shell: bash
         run: |
           if [ -n "${{ github.event.inputs.force_url }}" ]; then
             python getAndroidGameData.py --client jp --url "${{ github.event.inputs.force_url }}"
