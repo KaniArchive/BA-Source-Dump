@@ -3,7 +3,8 @@
     "ServerInfoVersion": "r89_66_60esvhmoj3nxjqzrtxxy",
     "GameVersion": "1.66.405117",
     "BuildVersion": "405117",
-    "AddressableVersion": "1.66.r89_cz71gsmhrn2ddmqykfnr",
-    "AddressableBuildVersion": "r89_cz71gsmhrn2ddmqykfnr",
-    "AddressableUrl": "https://prod-clientpatch.bluearchiveyostar.com/r89_cz71gsmhrn2ddmqykfnr"
+    "AddressableVersion": "1.66.r89_0p4hiw6167qahussewd4",
+    "AddressableBuildVersion": "r89_0p4hiw6167qahussewd4",
+    "AddressableUrl": "https://prod-clientpatch.bluearchiveyostar.com/r89_0p4hiw6167qahussewd4",
+    "SQLCipherKey": null
 }
