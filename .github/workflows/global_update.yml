@@ -26,6 +26,7 @@ jobs:
   dump-global-update:
     environment: "GitHub Action"
     runs-on: windows-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout Repository
